@@ -1,0 +1,30 @@
+[
+    {
+        "id": "osint_news_pulse",
+        "schedule": "0 * * * *",
+        "task": "agent.report",
+        "args": {
+            "destination": "telegram",
+            "thread": "osint_news",
+            "prompt": "Run a quick OSINT sweep on current cybersecurity, geopolitical, and darknet chatter. Summarize key threats, anomalies, and emerging trends for the last hour. Use web_osint_scan, web_news_brief, and discord_search_history if relevant."
+        }
+    },
+    {
+        "id": "daily_gmail_digest",
+        "schedule": "0 8 * * *",
+        "task": "agent.report",
+        "args": {
+            "destination": "telegram",
+            "thread": "gmail_digest",
+            "prompt": "Use gog_gmail_read to pull important and unread emails from the last 24 hours, cluster them by topic, and produce an actionable Gmail summary with tasks and deadlines."
+        }
+    },
+    {
+        "id": "quick_maintenance_tasks",
+        "schedule": "*/30 * * * *",
+        "task": "agent.run",
+        "args": {
+            "prompt": "Run quick automation checks (log health, pending GitHub notifications, high-priority emails). If there is anything urgent, send a short alert to Telegram. If nothing critical, output NO_REPLY."
+        }
+    }
+]

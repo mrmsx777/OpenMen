@@ -1,0 +1,212 @@
+{
+    "envFile": "~/.openclaw/.env",
+    "models": {
+        "mode": "merge",
+        "providers": {
+            "google": {
+                "apiKey": "${GEMINI_API_KEY}"
+            },
+            "moonshot": {
+                "baseUrl": "https://api.moonshot.ai/v1",
+                "apiKey": "${MOONSHOT_API_KEY}",
+                "api": "openai-completions",
+                "models": [
+                    {
+                        "id": "kimi-k2.5",
+                        "name": "Kimi K2.5"
+                    }
+                ]
+            }
+        }
+    },
+    "agents": {
+        "defaults": {
+            "workspace": "~/.openclaw/workspace",
+            "sandbox": {
+                "mode": "off"
+            },
+            "models": [
+                "google/gemini-1.5-pro",
+                "moonshot/kimi-k2.5"
+            ],
+            "model": {
+                "primary": "google/gemini-1.5-pro",
+                "fallbacks": [
+                    "moonshot/kimi-k2.5"
+                ]
+            },
+            "compaction": {
+                "reserveTokensFloor": 20000,
+                "memoryFlush": {
+                    "enabled": true,
+                    "softThresholdTokens": 8000,
+                    "systemPrompt": "Context limit approaching. Synthesize current intelligence vectors and store highly durable, actionable summaries into memory/YYYY-MM-DD.md.",
+                    "prompt": "Write actionable investigative notes to memory/YYYY-MM-DD.md. Reply precisely with NO_REPLY if there is no critical intelligence to persist."
+                }
+            },
+            "memorySearch": {
+                "enabled": true,
+                "indexMode": "markdown",
+                "minScore": 0.3,
+                "maxResults": 20
+            }
+        }
+    },
+    "channels": {
+        "telegram": {
+            "enabled": true,
+            "botToken": "${TELEGRAM_BOT_TOKEN}",
+            "allowFrom": [
+                "*"
+            ],
+            "retry": {
+                "attempts": 10,
+                "minDelayMs": 1000,
+                "maxDelayMs": 15000,
+                "jitter": 0.3
+            },
+            "groups": {
+                "*": {
+                    "requireMention": true
+                }
+            }
+        }
+    },
+    "logging": {
+        "level": "INFO",
+        "format": "json",
+        "redactSensitive": true,
+        "destinations": [
+            {
+                "file": "/var/log/openclaw/agent.log"
+            }
+        ]
+    },
+    "browser": {
+        "enabled": true,
+        "headless": true
+    },
+    "cron": {
+        "enabled": true,
+        "maxConcurrentRuns": 2,
+        "sessionRetention": "48h",
+        "runLog": {
+            "maxBytes": "5mb",
+            "keepLines": 5000
+        }
+    },
+    "skills": {
+        "allowBundled": [
+            "gemini"
+        ],
+        "load": {
+            "extraDirs": [
+                "~/.openclaw/workspace/skills",
+                "~/.openclaw/workspace/skills/gog",
+                "~/.openclaw/workspace/skills/discord",
+                "~/.openclaw/workspace/skills/github",
+                "~/.openclaw/workspace/skills/web",
+                "~/.openclaw/workspace/skills/osint",
+                "~/.openclaw/workspace/skills/automation"
+            ],
+            "watch": true,
+            "watchDebounceMs": 250
+        },
+        "install": {
+            "preferBrew": false
+        },
+        "entries": {
+            "gog_workspace": {
+                "enabled": true,
+                "path": "~/.openclaw/workspace/skills/gog",
+                "env": {
+                    "GOG_ACCOUNT": "${GOG_ACCOUNT}"
+                }
+            },
+            "discord_intel": {
+                "enabled": true,
+                "path": "~/.openclaw/workspace/skills/discord",
+                "env": {
+                    "DISCORD_BOT_TOKEN": "${DISCORD_BOT_TOKEN}"
+                }
+            },
+            "github_automation": {
+                "enabled": true,
+                "path": "~/.openclaw/workspace/skills/github"
+            },
+            "web_osint": {
+                "enabled": true,
+                "path": "~/.openclaw/workspace/skills/web",
+                "env": {
+                    "NEWSAPI_KEY": "${NEWSAPI_KEY}",
+                    "SERP_API_KEY": "${SERP_API_KEY}"
+                }
+            },
+            "osint_graph": {
+                "enabled": true,
+                "path": "~/.openclaw/workspace/skills/osint"
+            },
+            "quick_automation": {
+                "enabled": true,
+                "path": "~/.openclaw/workspace/skills/automation"
+            },
+            "playwright-mcp": {
+                "enabled": true
+            },
+            "playwright-scraper-skill": {
+                "enabled": true
+            },
+            "decodo-web-scraper": {
+                "enabled": true
+            },
+            "web-fetch": {
+                "enabled": true
+            },
+            "trend-watcher": {
+                "enabled": true
+            },
+            "gitload": {
+                "enabled": true
+            },
+            "github": {
+                "enabled": true
+            },
+            "gmail": {
+                "enabled": true,
+                "env": {
+                    "GMAIL_ACCOUNT": "${GOG_ACCOUNT}"
+                }
+            },
+            "automation-workflows": {
+                "enabled": true
+            },
+            "self-improving-agent": {
+                "enabled": true
+            },
+            "backup": {
+                "enabled": true
+            },
+            "bird": {
+                "enabled": true,
+                "env": {
+                    "TWITTER_BEARER_TOKEN": "${TWITTER_BEARER_TOKEN}"
+                }
+            },
+            "reddit-osint": {
+                "enabled": true
+            },
+            "youtube-summarizer": {
+                "enabled": true
+            },
+            "discord": {
+                "enabled": true,
+                "env": {
+                    "DISCORD_BOT_TOKEN": "${DISCORD_BOT_TOKEN}"
+                }
+            },
+            "osint-bundle": {
+                "enabled": true
+            }
+        }
+    }
+}
